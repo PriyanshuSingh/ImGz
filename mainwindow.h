@@ -2,55 +2,59 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
-namespace Ui {
-class MainWindow;
-}
+class Filter;
+class CircleFilter;
+class RasterLabel;
+class QPlainTextEdit;
+class QLabel;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-    void processFrameAndUpdateGui();
+signals:
 
-private slots:
-    void on_pushButton_2_clicked();
+public slots:
 
 private:
-    Ui::MainWindow *ui;
-    cv::VideoCapture capWebcam;
-    cv::Mat matOriginal;
-    cv::Mat matProcessed;
+    //Main Widget
+    RasterLabel *rasterLabel;
 
-    int currentFilter;
+    //Action
+    QAction *circleAction;
 
-    QImage qimgOriginal;
-    QImage qimgProcessed;
+    //Menu
+    QMenu *fileMenu;
+    QMenu *helpMenu;
+    QMenu *effectMenu;
 
-    std::vector< cv::Vec3f > vecCircles;
-    std::vector< cv::Vec3f >::iterator itrCircles;
 
-    QTimer* tmrTimer;
-    /////////////////////////////////////////////////////
-    /// \brief fillComboBoxWithFilters
-    /// we will use MODELS for comboBox items.
-    /// initializing comboBox values through a hack for
-    /// testing purposes
-    void fillComboBoxWithFilters();
-    static const int COMBO_BOX_LENGTH = 4;
-    static const int ORIGINAL = 0;
-    static const int GAUSSIAN_BLUR = 1;
-    static const int BOX_BLUR = 2;
-    static const int CANNY_EDGES = 3;
-    /////////////////////////////////////////////////////
+    //DockWidgets
+    QDockWidget *bottomDock;
+    QDockWidget *rightDock;
+
+    QPlainTextEdit *logTxtEdit;
+
+    QToolBar *leftToolBar;
+
+    QLabel *xyLabel;
+
+    //create function
+    void createMenu();
+    void createToolBar();
+    void createStatusBar();
+    void createDockWidget();
+
+
+    Filter *ceff;
+
+
+    cv::Mat ii;
 };
 
 #endif // MAINWINDOW_H
