@@ -49,6 +49,7 @@ private:
     void createToolBar();
     void createStatusBar();
     void createDockWidget();
+    void createBottomDock();
 
 
     Filter *ceff;

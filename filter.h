@@ -3,17 +3,19 @@
 
 #include <opencv2/core/core.hpp>
 #include <QMouseEvent>
-class Filter
+#include <QDockWidget>
+#include<QWidget>
+class Filter:public QObject
 {
 public:
     Filter();
     virtual void mouseReleased(QMouseEvent *ev) { };
     virtual void mousePressed(QMouseEvent *ev) { };
     virtual void mouseMoved(QMouseEvent *ev) { };
-
+    virtual void updateBottomDock(QDockWidget *dock, QWidget *parent){ };
+    virtual cv::Mat getImage(){ };
     cv::Mat originalImg;
     cv::Mat processedImg;
-    virtual cv::Mat getImage(){ };
     QWidget *propertyWidget;
     void setImage(cv::Mat im);
 
