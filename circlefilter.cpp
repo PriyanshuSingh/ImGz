@@ -11,6 +11,8 @@
 #include "filter.h"
 #include "circlefilter.h"
 #include <cmath>
+#include <QLabel>
+#include <QVBoxLayout>
 
 
 
@@ -20,6 +22,7 @@ CircleFilter::CircleFilter():Filter()
     thickn->setRange(0,100);
     thickn->setSingleStep(1);
     thickn->setValue(0);
+
     connect(thickn,SIGNAL(valueChanged(int)),this,SLOT(updateThickness(int)));
 
 }
@@ -72,14 +75,14 @@ void CircleFilter::updateThickness(int i){
 }
 
 void CircleFilter::updateBottomDock(QDockWidget *dock, QWidget *parent){
-    //dock = new QDockWidget(parent);
-    QWidget *j=new QWidget();
-    j->setStyleSheet("background-color:red;");
-    dock->setWidget(j);
-
-    dock->setWidget(thickn);
-
-    //parent->addDockWidget(Qt::BottomDockWidgetArea,dock);
+    QWidget *window=new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout();
+    QLabel *thicknLabel = new QLabel();
+    thicknLabel->setText("Thickness");
+    layout->addWidget(thicknLabel);
+    layout->addWidget(thickn);
+    window->setLayout(layout);
+    dock->setWidget(window);
 }
 
 

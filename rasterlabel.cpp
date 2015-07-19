@@ -2,7 +2,9 @@
 #include <QTimer>
 #include <QImage>
 #include <iostream>
-
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 RasterLabel::RasterLabel(QWidget *parent):QLabel(parent)
 {
 
@@ -18,7 +20,10 @@ RasterLabel::~RasterLabel()
 void RasterLabel::rr()
 {
     imgMat = filter->getImage();
-    QImage qimg((uchar*)imgMat.data, imgMat.cols, imgMat.rows, imgMat.step, QImage::Format_RGB888);
+    cv::Mat temp;
+    cvtColor(imgMat, temp,CV_BGR2RGB);
+    QImage qimg((uchar*)temp.data, imgMat.cols, imgMat.rows, imgMat.step, QImage::Format_RGB888);
+    //qimg.bits();
     setPixmap(QPixmap::fromImage(qimg));
 }
 

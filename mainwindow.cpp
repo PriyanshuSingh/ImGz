@@ -9,19 +9,22 @@
 #include "mainwindow.h"
 #include "rasterlabel.h"
 #include "circlefilter.h"
+#include "openingfilter.h"
 #include <iostream>
+#include <QVBoxLayout>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    ii = cv::imread("/home/abhishek/Desktop/openCV/Test/lena.jpg");
+    mainImage = cv::imread("/home/abhishek/Desktop/openCV/Test/lena.jpg");
 
-    ceff = new CircleFilter();
+    //currentFilter = new CircleFilter();
+    currentFilter=new OpeningFilter;
     rasterLabel = new RasterLabel(this);
-    rasterLabel->setImage(ii);
-    rasterLabel->setFilter(ceff);
-    ceff->setImage(ii);
+    rasterLabel->setImage(mainImage);
+    rasterLabel->setFilter(currentFilter);
+    currentFilter->setImage(mainImage);
     rasterLabel->initRender();
     createMenu();
     createStatusBar();
@@ -52,8 +55,9 @@ void MainWindow::createStatusBar()
 void MainWindow::createDockWidget()
 {
     rightDock = new QDockWidget(QString("Properties"),this);
+    //QVBoxLayout *rightDockLayout = new QVBoxLayout();
+    //Qbutton *openingButton=new QButton;
     bottomDock = new QDockWidget(this);
-    //rightDock->setStyleSheet("background-color:red;");
     QWidget *j=new QWidget();
     j->setStyleSheet("background-color:red;");
     rightDock->setWidget(j);
@@ -71,12 +75,5 @@ void MainWindow::createToolBar()
 }
 
 void MainWindow::createBottomDock(){
-    //bottomDock = new QDockWidget(QString("Options"),this);
-    //QDockWidget* temp=this->ceff->updateBottomDock(this->bottomDock,this);
-    std::cout<<"Widget";
-    ceff->updateBottomDock(bottomDock,this);
-
-    std::cout<<"Widget";
-    //addDockWidget(Qt::BottomDockWidgetArea,bottomDock);
-    //addDockWidget(Qt::BottomDockWidgetArea,temp);
+    currentFilter->updateBottomDock(bottomDock,this);
 }

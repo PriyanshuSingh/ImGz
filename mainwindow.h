@@ -52,10 +52,10 @@ private:
     void createBottomDock();
 
 
-    Filter *ceff;
+    Filter *currentFilter;
 
 
-    cv::Mat ii;
+    cv::Mat mainImage;
 };
 
 #endif // MAINWINDOW_H

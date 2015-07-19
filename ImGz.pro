@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     rasterlabel.cpp \
     filter.cpp \
-    circlefilter.cpp
+    circlefilter.cpp \
+    openingfilter.cpp
 
 INCLUDEPATH += /usr/local/include/Opencv
 
@@ -26,6 +27,7 @@ HEADERS  += \
     mainwindow.h \
     rasterlabel.h \
     filter.h \
-    circlefilter.h
+    circlefilter.h \
+    openingfilter.h
 
 FORMS    +=
