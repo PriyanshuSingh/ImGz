@@ -23,6 +23,8 @@ CircleFilter::CircleFilter():Filter()
     thickn->setSingleStep(1);
     thickn->setValue(0);
 
+    createPropertyWidget();
+
     connect(thickn,SIGNAL(valueChanged(int)),this,SLOT(updateThickness(int)));
 
 }
@@ -74,15 +76,16 @@ void CircleFilter::updateThickness(int i){
     thickness=i;
 }
 
-void CircleFilter::updateBottomDock(QDockWidget *dock, QWidget *parent){
-    QWidget *window=new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout();
+void CircleFilter::createPropertyWidget(){
+    propertyWidget =new QWidget();
+    QHBoxLayout *HLayout = new QHBoxLayout();
     QLabel *thicknLabel = new QLabel();
     thicknLabel->setText("Thickness");
-    layout->addWidget(thicknLabel);
-    layout->addWidget(thickn);
-    window->setLayout(layout);
-    dock->setWidget(window);
+    HLayout->addWidget(thicknLabel);
+    HLayout->addWidget(thickn);
+    propertyWidget->setLayout(HLayout);
+    propertyWidget->setFixedSize(propertyWidget->sizeHint());
+    propertyWidget->setStyleSheet("background-color:grey");
 }
 
 

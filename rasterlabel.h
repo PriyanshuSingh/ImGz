@@ -17,20 +17,30 @@ public:
 
     void setFilter(Filter *filter);
     void setImage(cv::Mat img);
-    void initRender();
-    void stopRender();
+
+    bool isFilterDefined() const;
+    bool isImgDefined() const;
 
 signals:
+    void nothingToDisplay();
+    void mouseMoved(QMouseEvent *ev);
+    void mousePressed(QMouseEvent *ev);
+    void mouseReleased(QMouseEvent *ev);
 
 public slots:
-    void rr();
+    void renderImage();
+
+private slots:
+    void noDisplayableImage();
 
 private:
     cv::Mat imgMat;
+
     Filter *filter;
     QImage qimg;
     QTimer *tmr;
-
+    bool filterDefined;
+    bool imgDefined;
     void mouseMoveEvent(QMouseEvent *ev);
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);

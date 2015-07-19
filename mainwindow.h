@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <opencv2/core/core.hpp>
+#include "morphOperations.h"
+#include "circlefilter.h"
+
 class Filter;
 class CircleFilter;
 class RasterLabel;
@@ -21,12 +24,24 @@ signals:
 
 public slots:
 
+private slots:
+    void open();
+    void updateStatusBar(QMouseEvent*);
+    void enableCircleFilter();
+    void enableMorphFilter();
+
 private:
     //Main Widget
     RasterLabel *rasterLabel;
 
     //Action
     QAction *circleAction;
+
+    QAction *morphAction;
+
+    QAction *openAction;
+    QAction *saveAction;
+    QAction *aboutAction;
 
     //Menu
     QMenu *fileMenu;
@@ -45,17 +60,22 @@ private:
     QLabel *xyLabel;
 
     //create function
+    void createAction();
     void createMenu();
     void createToolBar();
     void createStatusBar();
     void createDockWidget();
-    void createBottomDock();
-
+    void createFilter();
+    void updateDock();
 
     Filter *currentFilter;
 
+    CircleFilter *circleFitler;
+    MorphOperations *morphFilter;
 
     cv::Mat mainImage;
+    QString filePath;
+
 };
 
 #endif // MAINWINDOW_H

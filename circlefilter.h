@@ -14,14 +14,13 @@ class CircleFilter : public Filter
     Q_OBJECT
 public:
     CircleFilter();
-    void mousePressed(QMouseEvent *ev);
-    void mouseReleased(QMouseEvent *ev);
-    void mouseMoved(QMouseEvent *ev);
-    void updateBottomDock(QDockWidget *dock, QWidget *parent);
     cv::Mat getImage();
 
 public slots:
     void updateThickness(int i);
+    void mousePressed(QMouseEvent *ev);
+    void mouseReleased(QMouseEvent *ev);
+    void mouseMoved(QMouseEvent *ev);
 
 signals:
 
@@ -34,6 +33,8 @@ private:
     int thickness;
     cv::Mat tempImg;
     QSpinBox *thickn;
+
+    void createPropertyWidget();
 };
 
 #endif // CIRCLEFILTER_H

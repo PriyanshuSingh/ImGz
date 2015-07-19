@@ -9,15 +9,17 @@ class Filter:public QObject
 {
 public:
     Filter();
-    virtual void mouseReleased(QMouseEvent *ev) { };
-    virtual void mousePressed(QMouseEvent *ev) { };
-    virtual void mouseMoved(QMouseEvent *ev) { };
-    virtual void updateBottomDock(QDockWidget *dock, QWidget *parent){ };
     virtual cv::Mat getImage(){ };
+    QWidget *getWidget();
     cv::Mat originalImg;
     cv::Mat processedImg;
     QWidget *propertyWidget;
     void setImage(cv::Mat im);
+
+public slots:
+    virtual void mouseReleased(QMouseEvent *ev) { };
+    virtual void mousePressed(QMouseEvent *ev) { };
+    virtual void mouseMoved(QMouseEvent *ev) { };
 
 protected:
     void setProcessed(bool proc);

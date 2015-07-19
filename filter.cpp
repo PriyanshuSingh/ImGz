@@ -5,6 +5,11 @@ Filter::Filter()
 
 }
 
+QWidget *Filter::getWidget()
+{
+    return propertyWidget;
+}
+
 bool Filter::isProcessed(){
     return imageReady;
 }

@@ -13,16 +13,16 @@ class MorphOperations : public Filter
     Q_OBJECT
 public: 
     MorphOperations();
-    void mousePressed(QMouseEvent *ev);
-    void mouseReleased(QMouseEvent *ev);
-    void mouseMoved(QMouseEvent *ev);
-    void updateBottomDock(QDockWidget *dock, QWidget *parent);
     cv::Mat getImage();
     void applyFilter();
+
 public slots:
     void updateMorphElement(int elementType);
     void updateKernelSize(int kSize);
     void updateMorphOperation(int morphOpType);
+    void mousePressed(QMouseEvent *ev);
+    void mouseReleased(QMouseEvent *ev);
+    void mouseMoved(QMouseEvent *ev);
 
 signals:
 
@@ -34,6 +34,9 @@ private:
     QSpinBox *kSizeSpinBox;
     QComboBox *morphTypeComboBox;
     QComboBox *morphElementComboBox;
+
+    void createPropertyWidget();
+    void createProperties();
 };
 
 #endif // MORPHOPERATIONS_H
