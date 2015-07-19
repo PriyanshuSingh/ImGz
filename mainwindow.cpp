@@ -9,7 +9,7 @@
 #include "mainwindow.h"
 #include "rasterlabel.h"
 #include "circlefilter.h"
-#include "openingfilter.h"
+#include "morphOperations.h"
 #include <iostream>
 #include <QVBoxLayout>
 #include <opencv2/core/core.hpp>
@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mainImage = cv::imread("/home/abhishek/Desktop/openCV/Test/lena.jpg");
 
     //currentFilter = new CircleFilter();
-    currentFilter=new OpeningFilter;
+    currentFilter=new MorphOperations;
     rasterLabel = new RasterLabel(this);
     rasterLabel->setImage(mainImage);
     rasterLabel->setFilter(currentFilter);

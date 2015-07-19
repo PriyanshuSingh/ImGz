@@ -1,5 +1,5 @@
-#ifndef OPENINGFILTER_H
-#define OPENINGFILTER_H
+#ifndef MORPHOPERATIONS_H
+#define MORPHOPERATIONS_H
 
 #include <QMainWindow>
 #include <QObject>
@@ -8,11 +8,11 @@
 #include <QSpinBox>
 #include <QComboBox>
 
-class OpeningFilter : public Filter
+class MorphOperations : public Filter
 {
     Q_OBJECT
 public: 
-    OpeningFilter();
+    MorphOperations();
     void mousePressed(QMouseEvent *ev);
     void mouseReleased(QMouseEvent *ev);
     void mouseMoved(QMouseEvent *ev);
@@ -22,15 +22,18 @@ public:
 public slots:
     void updateMorphElement(int elementType);
     void updateKernelSize(int kSize);
+    void updateMorphOperation(int morphOpType);
 
 signals:
 
 private:
     int element;
     int kSize;
+    int morphOperationType;
     cv::Mat tempImage;
-    QSpinBox *kernelSize;
-    QComboBox *morphElement;
+    QSpinBox *kSizeSpinBox;
+    QComboBox *morphTypeComboBox;
+    QComboBox *morphElementComboBox;
 };
 
-#endif // OPENINGFILTER_H
+#endif // MORPHOPERATIONS_H
