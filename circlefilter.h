@@ -15,6 +15,10 @@ class CircleFilter : public Filter
 public:
     CircleFilter();
     cv::Mat getImage();
+    void applyFilter();
+
+    bool isNewCircleInProgress() const;
+    void setNewCircleInProgress(bool value);
 
 public slots:
     void updateThickness(int i);
@@ -25,14 +29,12 @@ public slots:
 signals:
 
 private:
-    bool centerDefined;
-    bool radiusDefined;
-    bool okToContiue;
+    bool newCircleInProgress;
     QPoint center;
     int radius;
     int thickness;
     cv::Mat tempImg;
-    QSpinBox *thickn;
+    QSpinBox *thicknessSpinBox;
 
     void createPropertyWidget();
 };

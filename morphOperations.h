@@ -16,6 +16,9 @@ public:
     cv::Mat getImage();
     void applyFilter();
 
+    bool isChanged() const;
+    void setChanged(bool value);
+
 public slots:
     void updateMorphElement(int elementType);
     void updateKernelSize(int kSize);
@@ -23,6 +26,7 @@ public slots:
     void mousePressed(QMouseEvent *ev);
     void mouseReleased(QMouseEvent *ev);
     void mouseMoved(QMouseEvent *ev);
+    void somethingChanged();
 
 signals:
 
@@ -30,6 +34,7 @@ private:
     int element;
     int kSize;
     int morphOperationType;
+    bool changed;
     cv::Mat tempImage;
     QSpinBox *kSizeSpinBox;
     QComboBox *morphTypeComboBox;

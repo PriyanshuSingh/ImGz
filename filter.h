@@ -10,11 +10,15 @@ class Filter:public QObject
 public:
     Filter();
     virtual cv::Mat getImage(){ };
+    virtual void applyFilter(){ };
     QWidget *getWidget();
     cv::Mat originalImg;
     cv::Mat processedImg;
     QWidget *propertyWidget;
     void setImage(cv::Mat im);
+
+signals:
+    void imageChanged();
 
 public slots:
     virtual void mouseReleased(QMouseEvent *ev) { };

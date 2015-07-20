@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //mainImage = cv::imread("/Users/tgz/Documents/cvTutorial/opencvTutorial/opencvTutorial/lena.jpg");
 
     rasterLabel = new RasterLabel(this);
-    //logTxtEdit = new QPlainTextEdit;
     createFilter();
     createAction();
     createMenu();
@@ -44,6 +43,7 @@ void MainWindow::open()
 
     filePath = QFileDialog::getOpenFileName(this,QString("Open Image"),QString("."));
     if(!filePath.isEmpty()){
+        // TODO
         std::string a = filePath.toUtf8().constData();
         mainImage = cv::imread(a);
         rasterLabel->setImage(mainImage);
@@ -69,6 +69,11 @@ void MainWindow::enableMorphFilter()
     updateDock();
 }
 
+void MainWindow::enableWebcam()
+{
+    rasterLabel->setImageFromWebcam(true);
+}
+
 
 void MainWindow::createAction()
 {
@@ -92,6 +97,10 @@ void MainWindow::createAction()
     openAction->setStatusTip(QString("Open an image file"));
     connect(openAction,SIGNAL(triggered(bool)),this,SLOT(open()));
 
+    //openWebcamAction defination
+    openWebcamAction = new QAction(QString("webcam"),this);
+    connect(openWebcamAction,SIGNAL(triggered(bool)),this,SLOT(enableWebcam()));
+
     // saveAction defination
     saveAction = new QAction(QString("&Save"),this);
     saveAction->setShortcut(QKeySequence::Save);
@@ -109,6 +118,7 @@ void MainWindow::createMenu()
     fileMenu = new QMenu(QString("&File"));
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAction);
+    fileMenu->addAction(openWebcamAction);
     menuBar()->addMenu(fileMenu);
 
     // Effect Menu
@@ -133,7 +143,6 @@ void MainWindow::createDockWidget()
 {
     rightDock = new QDockWidget(QString("Properties"),this);
     bottomDock = new QDockWidget(this);
-    QWidget *qw = new QWidget();
     addDockWidget(Qt::RightDockWidgetArea,rightDock);
     addDockWidget(Qt::BottomDockWidgetArea,bottomDock);
 

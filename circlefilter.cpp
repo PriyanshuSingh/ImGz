@@ -7,6 +7,7 @@
 #include <QDockWidget>
 #include <QWidget>
 #include <QSpinBox>
+#include <QFormLayout>
 #include <QObject>
 #include "filter.h"
 #include "circlefilter.h"
@@ -18,58 +19,71 @@
 
 CircleFilter::CircleFilter():Filter()
 {
-    thickn=new QSpinBox;
-    thickn->setRange(0,100);
-    thickn->setSingleStep(1);
-    thickn->setValue(0);
+    thicknessSpinBox=new QSpinBox;
+    thicknessSpinBox->setRange(0,100);
+    thicknessSpinBox->setSingleStep(1);
+    thicknessSpinBox->setValue(0);
 
+
+    setNewCircleInProgress(false);
     createPropertyWidget();
 
-    connect(thickn,SIGNAL(valueChanged(int)),this,SLOT(updateThickness(int)));
+    connect(thicknessSpinBox,SIGNAL(valueChanged(int)),this,SLOT(updateThickness(int)));
 
 }
 void CircleFilter::mouseMoved(QMouseEvent *ev)
 {
-    setProcessed(false);
-    int x = ev->pos().x();
-    int y = ev->pos().y();
-    int radius = sqrt((center.x() - x)*(center.x() -x) + (center.y() - y)*(center.y() - y));
-    tempImg = originalImg.clone();
-    if(okToContiue && centerDefined){
-        cv::circle(tempImg, cv::Point(center.x(),center.y()), radius+1, cv::Scalar(100,200,250),thickness);
+    if(isNewCircleInProgress()){
+        int x = ev->pos().x();
+        int y = ev->pos().y();
+        radius = sqrt((center.x() - x)*(center.x() -x) + (center.y() - y)*(center.y() - y));
     }
-    processedImg = tempImg;
-    setProcessed(true);
+}
+bool CircleFilter::isNewCircleInProgress() const
+{
+    return newCircleInProgress;
+}
+
+void CircleFilter::setNewCircleInProgress(bool value)
+{
+    newCircleInProgress = value;
 }
 
 void CircleFilter::mousePressed(QMouseEvent *ev)
 {
-    centerDefined = true;
+    setNewCircleInProgress(true);
     center = ev->pos();
-    okToContiue = true;
+    radius = 0;
 }
 
 void CircleFilter::mouseReleased(QMouseEvent *ev)
 {
-    radiusDefined = true;
-    if(centerDefined){
+    if(isNewCircleInProgress()){
+        setNewCircleInProgress(false);
         int x = ev->pos().x();
         int y = ev->pos().y();
-        int radius = sqrt((center.x() - x)*(center.x() -x) + (center.y() - y)*(center.y() - y));
-            tempImg = originalImg.clone();
-        cv::circle(tempImg, cv::Point(center.x(),center.y()), radius+1, cv::Scalar(100,200,250),thickness);
+        radius = sqrt((center.x() - x)*(center.x() -x) + (center.y() - y)*(center.y() - y));
+        processedImg = originalImg.clone();
+        cv::circle(processedImg, cv::Point(center.x(),center.y()), radius+1, cv::Scalar(100,200,250),thickness);
     }
-    originalImg = tempImg;
-    processedImg = tempImg;
-    centerDefined = radiusDefined = okToContiue = false;
 }
 
 cv::Mat CircleFilter::getImage()
 {
-    if(isProcessed()){
+    if(isNewCircleInProgress()){
         return processedImg;
     }
     return originalImg;
+}
+
+void CircleFilter::applyFilter()
+{
+    if(isNewCircleInProgress()){
+        originalImg.copyTo(processedImg);
+        cv::circle(processedImg, cv::Point(center.x(),center.y()), radius+1, cv::Scalar(100,200,250),thickness);
+    }else{
+        processedImg.copyTo(originalImg);
+    }
 }
 
 void CircleFilter::updateThickness(int i){
@@ -77,13 +91,11 @@ void CircleFilter::updateThickness(int i){
 }
 
 void CircleFilter::createPropertyWidget(){
+
     propertyWidget =new QWidget();
-    QHBoxLayout *HLayout = new QHBoxLayout();
-    QLabel *thicknLabel = new QLabel();
-    thicknLabel->setText("Thickness");
-    HLayout->addWidget(thicknLabel);
-    HLayout->addWidget(thickn);
-    propertyWidget->setLayout(HLayout);
+    QFormLayout *FLayout = new QFormLayout();
+    FLayout->addRow(QString("Thickness"),thicknessSpinBox);
+    propertyWidget->setLayout(FLayout);
     propertyWidget->setFixedSize(propertyWidget->sizeHint());
     propertyWidget->setStyleSheet("background-color:grey");
 }

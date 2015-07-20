@@ -5,6 +5,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "morphOperations.h"
 RasterLabel::RasterLabel(QWidget *parent):QLabel(parent)
 {
 
@@ -12,6 +13,7 @@ RasterLabel::RasterLabel(QWidget *parent):QLabel(parent)
     connect(tmr,SIGNAL(timeout()),this, SLOT(renderImage()));
     connect(this,SIGNAL(nothingToDisplay()), this, SLOT(noDisplayableImage()));
     setMouseTracking(true);
+    setImageFromWebcam(false);
     filter = NULL;
     tmr->start(50);
 }
@@ -23,10 +25,23 @@ RasterLabel::~RasterLabel()
 
 void RasterLabel::renderImage()
 {
-
-    if(isImgDefined()){
+    if(isImageFromWebcam()){
+        cam.read(imgMat);
         if(isFilterDefined()){
+            filter->setImage(imgMat);
+            // TODO
+            //((MorphOperations*)filter)->applyFilter();
             imgMat = filter->getImage();
+        }
+        setFixedSize(QSize(imgMat.cols,imgMat.rows));
+        cv::Mat displayMat;
+        cvtColor(imgMat, displayMat, CV_BGR2RGB);
+        QImage qimg((uchar*)displayMat.data, imgMat.cols, imgMat.rows, imgMat.step, QImage::Format_RGB888);
+        setPixmap(QPixmap::fromImage(qimg));
+    }else if(isImgDefined()){
+        if(isFilterDefined()){
+            filter->applyFilter();
+            imgMat = filter->getImage().clone();
         }
         // Converting Image to RGB2BGR
         cv::Mat displayMat;
@@ -44,6 +59,22 @@ void RasterLabel::noDisplayableImage()
     setFixedSize(QSize(500,500));
     setStyleSheet("background-color:gray");
 }
+bool RasterLabel::isImageFromWebcam() const
+{
+    return imageFromWebcam;
+}
+
+void RasterLabel::setImageFromWebcam(bool value)
+{
+    imageFromWebcam = value;
+    if(value){
+        cam.open(0);
+        if(!tmr->isActive())tmr->start(50);
+    }else{
+        cam.release();
+    }
+}
+
 
 bool RasterLabel::isImgDefined() const
 {
@@ -60,18 +91,19 @@ void RasterLabel::setImage(cv::Mat img)
     imgMat = img;
     if(isImgDefined()){
         if(tmr->isActive() == false)tmr->start(50);
-        setFixedSize(QSize(imgMat.rows,imgMat.cols));
+        setFixedSize(QSize(imgMat.cols,imgMat.rows));
         if(isFilterDefined())this->filter->setImage(imgMat);
     }
 }
 
 void RasterLabel::setFilter(Filter *filter){
 
+    tmr->stop();
     if(isFilterDefined()){
         disconnect(this,SIGNAL(mouseMoved(QMouseEvent*)),this->filter,SLOT(mouseMoved(QMouseEvent*)));
         disconnect(this,SIGNAL(mousePressed(QMouseEvent*)),this->filter,SLOT(mousePressed(QMouseEvent*)));
         disconnect(this,SIGNAL(mouseReleased(QMouseEvent*)),this->filter,SLOT(mouseReleased(QMouseEvent*)));
-
+        if(!this->filter->getImage().empty())this->filter->getImage().copyTo(imgMat);
     }
     this->filter = filter;
     if(isImgDefined() && isFilterDefined())this->filter->setImage(imgMat);
@@ -80,7 +112,7 @@ void RasterLabel::setFilter(Filter *filter){
         connect(this,SIGNAL(mousePressed(QMouseEvent*)),this->filter,SLOT(mousePressed(QMouseEvent*)));
         connect(this,SIGNAL(mouseReleased(QMouseEvent*)),this->filter,SLOT(mouseReleased(QMouseEvent*)));
     }
-
+    tmr->start(50);
 }
 
 void RasterLabel::mouseMoveEvent(QMouseEvent *ev)

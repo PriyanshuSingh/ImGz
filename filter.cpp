@@ -20,6 +20,7 @@ void Filter::setProcessed(bool proc){
 
 void Filter::setImage(cv::Mat im)
 {
-    originalImg = processedImg = im;
+    originalImg = im.clone();
+    processedImg = im.clone();
 }
 

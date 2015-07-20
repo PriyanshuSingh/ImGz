@@ -29,6 +29,7 @@ private slots:
     void updateStatusBar(QMouseEvent*);
     void enableCircleFilter();
     void enableMorphFilter();
+    void enableWebcam();
 
 private:
     //Main Widget
@@ -36,12 +37,12 @@ private:
 
     //Action
     QAction *circleAction;
-
     QAction *morphAction;
 
     QAction *openAction;
     QAction *saveAction;
     QAction *aboutAction;
+    QAction *openWebcamAction;
 
     //Menu
     QMenu *fileMenu;

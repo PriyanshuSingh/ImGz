@@ -11,32 +11,38 @@
 MorphOperations::MorphOperations():Filter()
 {
     createPropertyWidget();
+    connect(this,SIGNAL(imageChanged()),this,SLOT(somethingChanged()));
 }
 
 
 void MorphOperations::updateKernelSize(int i){
     this->kSize=i;
-    this->applyFilter();        //Filter applied with updated kernel size
+    somethingChanged();
+    //this->applyFilter();        //Filter applied with updated kernel size
 }
 
 void MorphOperations::updateMorphElement(int elementType){
     this->element=elementType;
-    this->applyFilter();        //Filter applied with updated element type
+    somethingChanged();
+    //this->applyFilter();        //Filter applied with updated element type
 }
 
 void MorphOperations::updateMorphOperation(int morphOpType){
     switch (morphOpType) {
     case 0:                     // morph operation - Opening
         morphOperationType = 2;
-        applyFilter();
+        somethingChanged();
+        //applyFilter();
         break;
     case 1:                     // morph operation - Closing
         morphOperationType = 3;
-        applyFilter();
+        somethingChanged();
+        //applyFilter();
         break;
     case 2:                     // morph operation - Morphological gradient
         morphOperationType = 4;
-        applyFilter();
+        somethingChanged();
+        //applyFilter();
         break;
     default:
         break;
@@ -44,26 +50,25 @@ void MorphOperations::updateMorphOperation(int morphOpType){
 }
 
 void MorphOperations::applyFilter(){
-    setProcessed(false);
-    if(tempImage.empty())originalImg.copyTo(tempImage);
-    if(!tempImage.empty()){
-        cv::Mat strElement = getStructuringElement( element, cv::Size( 2*kSize + 1, 2*kSize+1 ), cv::Point( kSize, kSize));
-        cv::morphologyEx( tempImage, processedImg, morphOperationType, strElement);
+    //setProcessed(false);
+    if(isChanged()){
+        originalImg.copyTo(tempImage);
+        if(!tempImage.empty()){
+            cv::Mat strElement = getStructuringElement( element, cv::Size( 2*kSize + 1, 2*kSize+1 ), cv::Point( kSize, kSize));
+            cv::morphologyEx(tempImage, processedImg, morphOperationType, strElement);
+        }
+        setChanged(false);
     }
-    setProcessed(true);
+    //setProcessed(true);
 }
 
 
 cv::Mat MorphOperations::getImage()
 {
-    if(isProcessed()){
-        return processedImg;
-    }
-    return originalImg;
-}
-
-void MorphOperations::mouseMoved(QMouseEvent *ev){
-
+//    if(isProcessed()){
+//        return processedImg;
+//    }
+    return processedImg;
 }
 
 void MorphOperations::createPropertyWidget()
@@ -106,13 +111,32 @@ void MorphOperations::createProperties()
     connect(morphTypeComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateMorphOperation(int)));
 }
 
-
 void MorphOperations::mousePressed(QMouseEvent *ev){
 
 }
 
 void MorphOperations::mouseReleased(QMouseEvent *ev){
 
+}
+
+
+void MorphOperations::mouseMoved(QMouseEvent *ev){
+
+}
+
+void MorphOperations::somethingChanged()
+{
+    setChanged(true);
+}
+
+bool MorphOperations::isChanged() const
+{
+    return changed;
+}
+
+void MorphOperations::setChanged(bool value)
+{
+    changed = value;
 }
 
 
