@@ -4,9 +4,12 @@
 #include <opencv2/core/core.hpp>
 #include <QMouseEvent>
 #include <QDockWidget>
-#include<QWidget>
+#include <QWidget>
+#include <QPlainTextEdit>
 class Filter:public QObject
 {
+    Q_OBJECT
+
 public:
     Filter();
     virtual cv::Mat getImage(){ };
@@ -31,6 +34,7 @@ protected:
 
 private:
     bool imageReady;
+    QPlainTextEdit *logTxt;
 };
 
 #endif // FILTER_H

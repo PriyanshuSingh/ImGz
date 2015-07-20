@@ -22,5 +22,6 @@ void Filter::setImage(cv::Mat im)
 {
     originalImg = im.clone();
     processedImg = im.clone();
+    emit imageChanged();
 }
 

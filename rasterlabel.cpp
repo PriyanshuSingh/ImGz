@@ -31,6 +31,7 @@ void RasterLabel::renderImage()
             filter->setImage(imgMat);
             // TODO
             //((MorphOperations*)filter)->applyFilter();
+            filter->applyFilter();
             imgMat = filter->getImage();
         }
         setFixedSize(QSize(imgMat.cols,imgMat.rows));

@@ -29,7 +29,7 @@ public slots:
     void somethingChanged();
 
 signals:
-
+    //void imageChanged();
 private:
     int element;
     int kSize;
