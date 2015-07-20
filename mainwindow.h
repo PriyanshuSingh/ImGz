@@ -5,7 +5,7 @@
 #include <opencv2/core/core.hpp>
 #include "morphOperations.h"
 #include "circlefilter.h"
-
+#include "rectanglefilter.h"
 class Filter;
 class CircleFilter;
 class RasterLabel;
@@ -29,6 +29,7 @@ private slots:
     void updateStatusBar(QMouseEvent*);
     void enableCircleFilter();
     void enableMorphFilter();
+    void enableRectangleFilter();
     void enableWebcam();
 
 private:
@@ -38,6 +39,7 @@ private:
     //Action
     QAction *circleAction;
     QAction *morphAction;
+    QAction *rectangleAction;
 
     QAction *openAction;
     QAction *saveAction;
@@ -73,7 +75,7 @@ private:
 
     CircleFilter *circleFitler;
     MorphOperations *morphFilter;
-
+    RectangleFilter *rectangleFilter;
     cv::Mat mainImage;
     QString filePath;
 

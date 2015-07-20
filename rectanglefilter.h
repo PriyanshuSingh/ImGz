@@ -1,5 +1,5 @@
-#ifndef CIRCLEFILTER_H
-#define CIRCLEFILTER_H
+#ifndef RECTANGLEFILTER_H
+#define RECTANGLEFILTER_H
 
 #include <opencv2/core/core.hpp>
 #include <QMouseEvent>
@@ -8,37 +8,36 @@
 #include <QSpinBox>
 #include <QCheckBox>
 #include "filter.h"
-class QPoint;
 
-class CircleFilter : public Filter
+class RectangleFilter : public Filter
 {
     Q_OBJECT
+
 public:
-    CircleFilter();
+    RectangleFilter();
+
     cv::Mat getImage();
     void applyFilter();
 
-    bool isNewCircleInProgress() const;
-    void setNewCircleInProgress(bool value);
+    bool isNewRectangleInProgress() const;
+    void setNewRectangleInProgress(bool value);
 
 public slots:
     void updateThickness(int i);
     void mousePressed(QMouseEvent *ev);
     void mouseReleased(QMouseEvent *ev);
     void mouseMoved(QMouseEvent *ev);
-    void setFilledCircle(bool value);
-
-signals:
+    void setFilledRectangle(bool val);
 
 private:
-    bool newCircleInProgress;
-    QPoint center;
-    int radius;
+    bool newRectangleInProgress;
+    QPoint pt1;
+    QPoint pt2;
+
     int thickness;
-    cv::Mat tempImg;
     QSpinBox *thicknessSpinBox;
     QCheckBox *filledCheckBox;
     void createPropertyWidget();
 };
 
-#endif // CIRCLEFILTER_H
+#endif // RECTANGLEFILTER_H

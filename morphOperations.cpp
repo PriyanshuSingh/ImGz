@@ -17,14 +17,12 @@ MorphOperations::MorphOperations():Filter()
 
 void MorphOperations::updateKernelSize(int i){
     this->kSize=i;
-    somethingChanged();
-    //this->applyFilter();        //Filter applied with updated kernel size
+    somethingChanged();        //Filter applied with updated kernel size
 }
 
 void MorphOperations::updateMorphElement(int elementType){
     this->element=elementType;
-    somethingChanged();
-    //this->applyFilter();        //Filter applied with updated element type
+    somethingChanged();       //Filter applied with updated element type
 }
 
 void MorphOperations::updateMorphOperation(int morphOpType){
@@ -32,17 +30,14 @@ void MorphOperations::updateMorphOperation(int morphOpType){
     case 0:                     // morph operation - Opening
         morphOperationType = 2;
         somethingChanged();
-        //applyFilter();
         break;
     case 1:                     // morph operation - Closing
         morphOperationType = 3;
         somethingChanged();
-        //applyFilter();
         break;
     case 2:                     // morph operation - Morphological gradient
         morphOperationType = 4;
         somethingChanged();
-        //applyFilter();
         break;
     default:
         break;
@@ -50,24 +45,19 @@ void MorphOperations::updateMorphOperation(int morphOpType){
 }
 
 void MorphOperations::applyFilter(){
-    //setProcessed(false);
     if(isChanged()){
         originalImg.copyTo(tempImage);
         if(!tempImage.empty()){
-            cv::Mat strElement = getStructuringElement( element, cv::Size( 2*kSize + 1, 2*kSize+1 ), cv::Point( kSize, kSize));
+            cv::Mat strElement = getStructuringElement(element, cv::Size( 2*kSize + 1, 2*kSize+1 ), cv::Point( kSize, kSize));
             cv::morphologyEx(tempImage, processedImg, morphOperationType, strElement);
         }
         setChanged(false);
     }
-    //setProcessed(true);
 }
 
 
 cv::Mat MorphOperations::getImage()
 {
-//    if(isProcessed()){
-//        return processedImg;
-//    }
     return processedImg;
 }
 

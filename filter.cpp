@@ -25,3 +25,8 @@ void Filter::setImage(cv::Mat im)
     emit imageChanged();
 }
 
+void Filter::setLogText(QPlainTextEdit *logTxt)
+{
+    this->logTxt = logTxt;
+}
+

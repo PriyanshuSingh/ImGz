@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     rasterlabel.cpp \
     filter.cpp \
     circlefilter.cpp \
-    morphOperations.cpp
+    morphOperations.cpp \
+    rectanglefilter.cpp
 
 INCLUDEPATH += /usr/local/include/Opencv
 
@@ -28,6 +29,7 @@ HEADERS  += \
     rasterlabel.h \
     filter.h \
     circlefilter.h \
-    morphOperations.h
+    morphOperations.h \
+    rectanglefilter.h
 
 FORMS    +=

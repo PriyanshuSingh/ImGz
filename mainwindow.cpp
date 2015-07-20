@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //mainImage = cv::imread("/Users/tgz/Documents/cvTutorial/opencvTutorial/opencvTutorial/lena.jpg");
 
     rasterLabel = new RasterLabel(this);
+    logTxtEdit = new QPlainTextEdit(this);
+    logTxtEdit->setReadOnly(true);
     createFilter();
     createAction();
     createMenu();
@@ -59,6 +61,7 @@ void MainWindow::enableCircleFilter()
 {
     currentFilter = circleFitler;
     rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Circle Filter selected"));
     updateDock();
 }
 
@@ -66,12 +69,23 @@ void MainWindow::enableMorphFilter()
 {
     currentFilter = morphFilter;
     rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Morph Filter selected"));
+    updateDock();
+}
+
+void MainWindow::enableRectangleFilter()
+{
+    currentFilter = rectangleFilter;
+    rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Rectangle Filter selected"));
     updateDock();
 }
 
 void MainWindow::enableWebcam()
 {
     rasterLabel->setImageFromWebcam(true);
+    logTxtEdit->appendPlainText(QString("Webcam Enabled"));
+    setFixedSize(sizeHint());
 }
 
 
@@ -88,6 +102,11 @@ void MainWindow::createAction()
     morphAction = new QAction(QString("Morph"),this);
     morphAction->setStatusTip(QString("Morph effect"));
     connect(morphAction,SIGNAL(triggered(bool)),this,SLOT(enableMorphFilter()));
+
+    // rectangleAction defination
+    rectangleAction = new QAction(QString("Rectangle"),this);
+    rectangleAction->setStatusTip(QString("Draws the rectangle on the image"));
+    connect(rectangleAction,SIGNAL(triggered(bool)),this,SLOT(enableRectangleFilter()));
 
     // Menu Action //
 
@@ -144,6 +163,7 @@ void MainWindow::createDockWidget()
     rightDock = new QDockWidget(QString("Properties"),this);
     bottomDock = new QDockWidget(this);
     addDockWidget(Qt::RightDockWidgetArea,rightDock);
+    bottomDock->setWidget(logTxtEdit);
     addDockWidget(Qt::BottomDockWidgetArea,bottomDock);
 
 }
@@ -151,8 +171,11 @@ void MainWindow::createDockWidget()
 void MainWindow::createFilter()
 {
     circleFitler = new CircleFilter();
+    circleFitler->setLogText(logTxtEdit);
     morphFilter = new MorphOperations();
-
+    morphFilter->setLogText(logTxtEdit);
+    rectangleFilter = new RectangleFilter();
+    rectangleFilter->setLogText(logTxtEdit);
 }
 
 void MainWindow::updateDock()
@@ -168,6 +191,7 @@ void MainWindow::createToolBar()
 {
     leftToolBar = new QToolBar(this);
     leftToolBar->addAction(circleAction);
+    leftToolBar->addAction(rectangleAction);
     addToolBar(Qt::LeftToolBarArea, leftToolBar);
     leftToolBar->setMovable(false);
 }

@@ -7,10 +7,10 @@
 #include <QDockWidget>
 #include <QWidget>
 #include <QSpinBox>
+#include <QCheckBox>
 #include <QFormLayout>
 #include <QObject>
 #include "filter.h"
-#include "circlefilter.h"
 #include <cmath>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -24,13 +24,14 @@ CircleFilter::CircleFilter():Filter()
     thicknessSpinBox->setSingleStep(1);
     thicknessSpinBox->setValue(0);
 
-
+    filledCheckBox = new QCheckBox(QString("Filled"));
     setNewCircleInProgress(false);
     createPropertyWidget();
 
     connect(thicknessSpinBox,SIGNAL(valueChanged(int)),this,SLOT(updateThickness(int)));
-
+    connect(filledCheckBox,SIGNAL(toggled(bool)),this,SLOT(setFilledCircle(bool)));
 }
+
 void CircleFilter::mouseMoved(QMouseEvent *ev)
 {
     if(isNewCircleInProgress()){
@@ -39,6 +40,13 @@ void CircleFilter::mouseMoved(QMouseEvent *ev)
         radius = sqrt((center.x() - x)*(center.x() -x) + (center.y() - y)*(center.y() - y));
     }
 }
+
+void CircleFilter::setFilledCircle(bool value)
+{
+    thicknessSpinBox->setEnabled(!value);
+    thickness = (value)?-1:thicknessSpinBox->value();
+}
+
 bool CircleFilter::isNewCircleInProgress() const
 {
     return newCircleInProgress;
@@ -95,6 +103,7 @@ void CircleFilter::createPropertyWidget(){
     propertyWidget =new QWidget();
     QFormLayout *FLayout = new QFormLayout();
     FLayout->addRow(QString("Thickness"),thicknessSpinBox);
+    FLayout->addWidget(filledCheckBox);
     propertyWidget->setLayout(FLayout);
     propertyWidget->setFixedSize(propertyWidget->sizeHint());
     propertyWidget->setStyleSheet("background-color:grey");

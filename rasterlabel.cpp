@@ -34,7 +34,6 @@ void RasterLabel::renderImage()
             filter->applyFilter();
             imgMat = filter->getImage();
         }
-        setFixedSize(QSize(imgMat.cols,imgMat.rows));
         cv::Mat displayMat;
         cvtColor(imgMat, displayMat, CV_BGR2RGB);
         QImage qimg((uchar*)displayMat.data, imgMat.cols, imgMat.rows, imgMat.step, QImage::Format_RGB888);
@@ -70,6 +69,9 @@ void RasterLabel::setImageFromWebcam(bool value)
     imageFromWebcam = value;
     if(value){
         cam.open(0);
+        cam.set(CV_CAP_PROP_FRAME_WIDTH,640);
+        cam.set(CV_CAP_PROP_FRAME_HEIGHT,480);
+        setFixedSize(QSize(640,480));
         if(!tmr->isActive())tmr->start(50);
     }else{
         cam.release();

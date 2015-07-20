@@ -19,6 +19,7 @@ public:
     cv::Mat processedImg;
     QWidget *propertyWidget;
     void setImage(cv::Mat im);
+    void setLogText(QPlainTextEdit *logTxt);
 
 signals:
     void imageChanged();
