@@ -11,6 +11,7 @@
 #include "rasterlabel.h"
 #include "circlefilter.h"
 #include "morphOperations.h"
+#include "dotpatternfilter.h"
 #include <iostream>
 #include <QVBoxLayout>
 #include <opencv2/core/core.hpp>
@@ -96,6 +97,13 @@ void MainWindow::enableCircleDetectorFilter()
     updateDock();
 }
 
+void MainWindow::enableDotPatternFilter()
+{
+    currentFilter = dotPatternFilter;
+    rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Dot pattern selected"));
+}
+
 
 void MainWindow::createAction()
 {
@@ -120,6 +128,11 @@ void MainWindow::createAction()
     circleDetectorAction = new QAction(QString("Circle Detector"),this);
     circleDetectorAction->setStatusTip(QString("Detect circles in the image"));
     connect(circleDetectorAction,SIGNAL(triggered(bool)),this,SLOT(enableCircleDetectorFilter()));
+
+    // dotPatternAction defination
+    dotPatternAction = new QAction(QString("Dot Pattern"),this);
+    connect(dotPatternAction,SIGNAL(triggered(bool)),this,SLOT(enableDotPatternFilter()));
+
 
     // Menu Action //
 
@@ -157,6 +170,7 @@ void MainWindow::createMenu()
     effectMenu = new QMenu(QString("&Effect"));
     effectMenu->addAction(morphAction);
     effectMenu->addAction(circleDetectorAction);
+    effectMenu->addAction(dotPatternAction);
     menuBar()->addMenu(effectMenu);
 
     // Help Menu
@@ -192,6 +206,9 @@ void MainWindow::createFilter()
     rectangleFilter->setLogText(logTxtEdit);
     circleDetectorFilter = new CircleDetectorFilter();
     circleDetectorFilter->setLogText(logTxtEdit);
+    dotPatternFilter = new DotPatternFilter();
+    dotPatternFilter->setLogText(logTxtEdit);
+
 }
 
 void MainWindow::updateDock()

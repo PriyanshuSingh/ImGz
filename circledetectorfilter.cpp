@@ -111,6 +111,7 @@ void CircleDetectorFilter::updateUpperThreshold(int  thresh)
     appendLog(QString("Upper threshold: ")+QString::number(upperThreshold));
     if(thresh < 90){
         appendLog(QString("upper threshold below 90 is cpu intensive"));
+
     }
     somethingChanged();
 

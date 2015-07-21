@@ -7,6 +7,7 @@
 #include "circlefilter.h"
 #include "rectanglefilter.h"
 #include "circledetectorfilter.h"
+#include "dotpatternfilter.h"
 class Filter;
 class CircleFilter;
 class RasterLabel;
@@ -33,6 +34,7 @@ private slots:
     void enableRectangleFilter();
     void enableWebcam();
     void enableCircleDetectorFilter();
+    void enableDotPatternFilter();
 
 private:
     //Main Widget
@@ -43,6 +45,7 @@ private:
     QAction *morphAction;
     QAction *rectangleAction;
     QAction *circleDetectorAction;
+    QAction *dotPatternAction;
 
     QAction *openAction;
     QAction *saveAction;
@@ -80,6 +83,7 @@ private:
     MorphOperations *morphFilter;
     RectangleFilter *rectangleFilter;
     CircleDetectorFilter *circleDetectorFilter;
+    DotPatternFilter *dotPatternFilter;
     cv::Mat mainImage;
     QString filePath;
 
