@@ -25,6 +25,11 @@ void Filter::setImage(cv::Mat im)
     emit imageChanged();
 }
 
+void Filter::appendLog(QString message)
+{
+    logTxt->appendPlainText(message);
+}
+
 void Filter::setLogText(QPlainTextEdit *logTxt)
 {
     this->logTxt = logTxt;
