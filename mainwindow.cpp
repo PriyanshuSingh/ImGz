@@ -12,6 +12,7 @@
 #include "circlefilter.h"
 #include "morphOperations.h"
 #include "dotpatternfilter.h"
+#include "sharpnessfilter.h"
 #include <iostream>
 #include <QVBoxLayout>
 #include <opencv2/core/core.hpp>
@@ -56,6 +57,14 @@ void MainWindow::open()
 void MainWindow::updateStatusBar(QMouseEvent *ev)
 {
     xyLabel->setText(QString("x:")+QString::number(ev->pos().x())+QString("|y:")+QString::number(ev->pos().y()));
+}
+
+void MainWindow::enableSharpnessFilter()
+{
+    currentFilter = sharpnessFilter;
+    rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Sharpness Filter selected"));
+    updateDock();
 }
 
 void MainWindow::enableCircleFilter()
@@ -110,29 +119,34 @@ void MainWindow::createAction()
 {
     // filters and effects //
 
-    // circleAction defination
+    // circleAction definition
     circleAction = new QAction(QString("Circle"),this);
     circleAction->setStatusTip(QString("Draws the circle on the image"));
     connect(circleAction,SIGNAL(triggered(bool)),this,SLOT(enableCircleFilter()));
 
-    // morphAction defination
+    // morphAction definition
     morphAction = new QAction(QString("Morph"),this);
     morphAction->setStatusTip(QString("Morph effect"));
     connect(morphAction,SIGNAL(triggered(bool)),this,SLOT(enableMorphFilter()));
 
-    // rectangleAction defination
+    // rectangleAction definition
     rectangleAction = new QAction(QString("Rectangle"),this);
     rectangleAction->setStatusTip(QString("Draws the rectangle on the image"));
     connect(rectangleAction,SIGNAL(triggered(bool)),this,SLOT(enableRectangleFilter()));
 
-    // circleDetectorAction defination
+    // circleDetectorAction definition
     circleDetectorAction = new QAction(QString("Circle Detector"),this);
     circleDetectorAction->setStatusTip(QString("Detect circles in the image"));
     connect(circleDetectorAction,SIGNAL(triggered(bool)),this,SLOT(enableCircleDetectorFilter()));
 
-    // dotPatternAction defination
+    // dotPatternAction definition
     dotPatternAction = new QAction(QString("Dot Pattern"),this);
     connect(dotPatternAction,SIGNAL(triggered(bool)),this,SLOT(enableDotPatternFilter()));
+
+    // sharpnessAction definition
+    sharpnessAction = new QAction(QString("Sharpness Pattern"),this);
+    connect(sharpnessAction,SIGNAL(triggered(bool)),this,SLOT(enableSharpnessFilter()));
+
 
 
     // Menu Action //
@@ -172,6 +186,7 @@ void MainWindow::createMenu()
     effectMenu->addAction(morphAction);
     effectMenu->addAction(circleDetectorAction);
     effectMenu->addAction(dotPatternAction);
+    effectMenu->addAction(sharpnessAction);
     menuBar()->addMenu(effectMenu);
 
     // Help Menu
@@ -209,7 +224,8 @@ void MainWindow::createFilter()
     circleDetectorFilter->setLogText(logTxtEdit);
     dotPatternFilter = new DotPatternFilter();
     dotPatternFilter->setLogText(logTxtEdit);
-
+    sharpnessFilter = new SharpnessFilter();
+    sharpnessFilter->setLogText(logTxtEdit);
 }
 
 void MainWindow::updateDock()
