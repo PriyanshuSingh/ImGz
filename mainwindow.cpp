@@ -88,6 +88,13 @@ void MainWindow::enableWebcam()
     setFixedSize(sizeHint());
 }
 
+void MainWindow::enableCircleDetectorFilter()
+{
+    currentFilter = circleDetectorFilter;
+    rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Circle Detector selected"));
+}
+
 
 void MainWindow::createAction()
 {
@@ -107,6 +114,11 @@ void MainWindow::createAction()
     rectangleAction = new QAction(QString("Rectangle"),this);
     rectangleAction->setStatusTip(QString("Draws the rectangle on the image"));
     connect(rectangleAction,SIGNAL(triggered(bool)),this,SLOT(enableRectangleFilter()));
+
+    // circleDetectorAction defination
+    circleDetectorAction = new QAction(QString("Circle Detector"),this);
+    circleDetectorAction->setStatusTip(QString("Detect circles in the image"));
+    connect(circleDetectorAction,SIGNAL(triggered(bool)),this,SLOT(enableCircleDetectorFilter()));
 
     // Menu Action //
 
@@ -143,6 +155,7 @@ void MainWindow::createMenu()
     // Effect Menu
     effectMenu = new QMenu(QString("&Effect"));
     effectMenu->addAction(morphAction);
+    effectMenu->addAction(circleDetectorAction);
     menuBar()->addMenu(effectMenu);
 
     // Help Menu
@@ -176,6 +189,8 @@ void MainWindow::createFilter()
     morphFilter->setLogText(logTxtEdit);
     rectangleFilter = new RectangleFilter();
     rectangleFilter->setLogText(logTxtEdit);
+    circleDetectorFilter = new CircleDetectorFilter();
+    circleDetectorFilter->setLogText(logTxtEdit);
 }
 
 void MainWindow::updateDock()

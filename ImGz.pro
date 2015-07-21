@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     filter.cpp \
     circlefilter.cpp \
     morphOperations.cpp \
-    rectanglefilter.cpp
+    rectanglefilter.cpp \
+    circledetectorfilter.cpp
 
 INCLUDEPATH += /usr/local/include/Opencv
 
@@ -30,6 +31,7 @@ HEADERS  += \
     filter.h \
     circlefilter.h \
     morphOperations.h \
-    rectanglefilter.h
+    rectanglefilter.h \
+    circledetectorfilter.h
 
 FORMS    +=
