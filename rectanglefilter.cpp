@@ -62,8 +62,11 @@ void RectangleFilter::updateThickness(int i)
 
 void RectangleFilter::mousePressed(QMouseEvent *ev)
 {
-    setNewRectangleInProgress(true);
-    pt1 = ev->pos();
+    if(!isNewRectangleInProgress()){
+        setNewRectangleInProgress(true);
+        pt1 = ev->pos();
+        pt2 = ev->pos();
+    }
 }
 
 void RectangleFilter::mouseReleased(QMouseEvent *ev)
