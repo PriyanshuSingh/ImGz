@@ -93,6 +93,7 @@ void MainWindow::enableCircleDetectorFilter()
     currentFilter = circleDetectorFilter;
     rasterLabel->setFilter(currentFilter);
     logTxtEdit->appendPlainText(QString("Circle Detector selected"));
+    updateDock();
 }
 
 

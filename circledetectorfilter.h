@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QSlider>
 #include "filter.h"
 
 class CircleDetectorFilter : public Filter
@@ -29,11 +30,19 @@ public:
 public slots:
     void somethingChanged();
     void handleImageChanged();
+    void updateUpperThreshold(int thresh);
+    void updateLowerThreshold(int thresh);
 
 private:
     cv::Mat grayImgMat;
     bool changed;
+    int upperThreshold;
+    int lowerThreshold;
+    QSlider *lowerThresholdSlider;
+    QSlider *upperThresholdSlider;
     std::vector< cv::Vec3f > circles;
+    void createPropertyWidget();
+
 };
 
 #endif // CIRCLEDETECTORFILTER_H

@@ -13,11 +13,32 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <vector>
+#include <QSlider>
+
 
 CircleDetectorFilter::CircleDetectorFilter()
 {
+    upperThresholdSlider = new QSlider(Qt::Horizontal);
+    upperThresholdSlider->setFocusPolicy(Qt::StrongFocus);
+    upperThresholdSlider->setTickPosition(QSlider::TicksBothSides);
+    upperThresholdSlider->setTickInterval(100);
+    upperThresholdSlider->setRange(80,300);
+    upperThresholdSlider->setSingleStep(1);
+    upperThresholdSlider->setValue(120);
 
+    lowerThresholdSlider = new QSlider(Qt::Horizontal);
+    lowerThresholdSlider->setFocusPolicy(Qt::StrongFocus);
+    lowerThresholdSlider->setTickPosition(QSlider::TicksBothSides);
+    lowerThresholdSlider->setTickInterval(100);
+    lowerThresholdSlider->setSingleStep(1);
+    lowerThresholdSlider->setRange(1,300);
+    lowerThresholdSlider->setValue(40);
+    upperThreshold = 120;
+    lowerThreshold = 40;
+    createPropertyWidget();
     connect(this,SIGNAL(imageChanged()),this,SLOT(handleImageChanged()));
+    connect(upperThresholdSlider,SIGNAL(valueChanged(int)),this,SLOT(updateUpperThreshold(int)));
+    connect(lowerThresholdSlider,SIGNAL(valueChanged(int)),this,SLOT(updateLowerThreshold(int)));
 }
 
 bool CircleDetectorFilter::isChanged() const
@@ -34,8 +55,8 @@ void CircleDetectorFilter::applyFilter()
 {
     if(isChanged()){
         circles.empty();
-        cv::GaussianBlur(grayImgMat, grayImgMat, cv::Size(9, 9), 2, 2 );
-        cv::HoughCircles(grayImgMat,circles, CV_HOUGH_GRADIENT, 1, grayImgMat.rows/16, 150, 100, 0, 0);
+        cv::GaussianBlur(grayImgMat, grayImgMat, cv::Size(3, 3), 2, 2 );
+        cv::HoughCircles(grayImgMat,circles, CV_HOUGH_GRADIENT, 1, grayImgMat.rows/16, upperThreshold, 100, 0, 0);
 
         for(size_t i=0; i < circles.size(); i++){
             cv::Point center(cvRound(circles[i][0]),cvRound(circles[i][1]));
@@ -77,6 +98,43 @@ void CircleDetectorFilter::handleImageChanged()
     cv::cvtColor(originalImg, grayImgMat, CV_BGR2GRAY);
     originalImg.copyTo(processedImg);
     somethingChanged();
+}
+
+void CircleDetectorFilter::updateUpperThreshold(int  thresh)
+{
+    if(thresh < lowerThreshold + 5){
+        upperThreshold = lowerThreshold + 5;
+        upperThresholdSlider->setValue(upperThreshold);
+    }else{
+        upperThreshold = thresh;
+    }
+    appendLog(QString("Upper threshold: ")+QString::number(upperThreshold));
+    if(thresh < 90){
+        appendLog(QString("upper threshold below 90 is cpu intensive"));
+    }
+    somethingChanged();
+
+}
+
+void CircleDetectorFilter::updateLowerThreshold(int thresh)
+{
+    if(thresh > upperThreshold - 5){
+        lowerThreshold = upperThreshold - 5;
+        lowerThresholdSlider->setValue(lowerThreshold);
+    }else{
+        lowerThreshold = thresh;
+    }
+    appendLog(QString("Upper threshold: ")+QString::number(lowerThreshold));
+    somethingChanged();
+}
+
+void CircleDetectorFilter::createPropertyWidget()
+{
+    propertyWidget = new QWidget();
+    QFormLayout *fLayout = new QFormLayout();
+    fLayout->addRow(QString("Upper Threshold"),upperThresholdSlider);
+    fLayout->addRow(QString("Lower Threshold"),lowerThresholdSlider);
+    propertyWidget->setLayout(fLayout);
 }
 
 
