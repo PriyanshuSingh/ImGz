@@ -102,6 +102,7 @@ void MainWindow::enableDotPatternFilter()
     currentFilter = dotPatternFilter;
     rasterLabel->setFilter(currentFilter);
     logTxtEdit->appendPlainText(QString("Dot pattern selected"));
+    updateDock();
 }
 
 

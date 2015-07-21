@@ -4,6 +4,8 @@
 #include <QObject>
 #include "filter.h"
 #include <opencv2/core/core.hpp>
+#include <QSlider>
+#include <QCheckBox>
 class DotPatternFilter : public Filter
 {
 
@@ -25,16 +27,26 @@ public:
     void setChanged(bool value);
 
 
+    bool isFilled() const;
+
+
 public slots:
     void somethingChanged();
     void handleImageChanged();
+    void updateSquareSize(int sq);
+    void setFilled(bool value);
 
 private:
     bool changed;
+    bool filled;
     int squareSize;
+    QSlider *squareSizeSlider;
+    QCheckBox *filledCheckBox;
     cv::Mat destMat;
     cv::Mat patternMaskMat;
     cv::Mat destMat_32f;
+
+    void createPropertyWidget();
 };
 
 #endif // DOTPATTERNFILTER_H

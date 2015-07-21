@@ -18,7 +18,23 @@
 DotPatternFilter::DotPatternFilter():Filter()
 {
     squareSize = 10;
+    squareSizeSlider = new QSlider(Qt::Horizontal);
+    squareSizeSlider->setFocusPolicy(Qt::StrongFocus);
+    squareSizeSlider->setTickInterval(100);
+    squareSizeSlider->setTickPosition(QSlider::TicksBothSides);
+    squareSizeSlider->setSingleStep(1);
+    squareSizeSlider->setRange(4,50);
+    squareSizeSlider->setValue(10);
+
+    filled = true;
+    filledCheckBox = new QCheckBox(QString("filled"));
+    filledCheckBox->setChecked(true);
+
+    connect(filledCheckBox,SIGNAL(toggled(bool)),this,SLOT(setFilled(bool)));
     connect(this,SIGNAL(imageChanged()),this,SLOT(handleImageChanged()));
+    connect(squareSizeSlider,SIGNAL(valueChanged(int)),this,SLOT(updateSquareSize(int)));
+
+    createPropertyWidget();
 }
 
 void DotPatternFilter::applyFilter()
@@ -57,17 +73,15 @@ cv::Mat DotPatternFilter::getImage()
 
 void DotPatternFilter::createPatternMask()
 {
-    if(patternMaskMat.empty() || patternMaskMat.rows != originalImg.rows || patternMaskMat.cols != originalImg.cols){
-        cv::Mat pttrn = cv::Mat::zeros(originalImg.size(), CV_8UC1);
-        for(int i = 0; i < originalImg.rows; i += squareSize){
-            for(int j = 0; j < originalImg.cols; j += squareSize){
-                cv::circle(pttrn,cv::Point(j+squareSize/2,i+squareSize/2),squareSize/2-1,cv::Scalar(255,255,255));
-            }
+
+    cv::Mat pttrn = cv::Mat::zeros(originalImg.size(), CV_8UC1);
+    for(int i = 0; i < originalImg.rows; i += squareSize){
+        for(int j = 0; j < originalImg.cols; j += squareSize){
+            cv::circle(pttrn,cv::Point(j+squareSize/2,i+squareSize/2),squareSize/2-1,cv::Scalar(255,255,255),(isFilled())?-1:1);
         }
-        pttrn.convertTo(patternMaskMat, CV_32F);
-        cv::normalize(patternMaskMat,patternMaskMat, 0, 1, cv::NORM_MINMAX);
-        somethingChanged();
     }
+    pttrn.convertTo(patternMaskMat, CV_32F);
+    cv::normalize(patternMaskMat,patternMaskMat, 0, 1, cv::NORM_MINMAX);
 
 }
 
@@ -83,7 +97,6 @@ void DotPatternFilter::createPixelattedImage()
         }
     }
     destMat.convertTo(destMat_32f, CV_32F);
-    somethingChanged();
 }
 bool DotPatternFilter::isChanged() const
 {
@@ -102,9 +115,40 @@ void DotPatternFilter::somethingChanged()
 
 void DotPatternFilter::handleImageChanged()
 {
+    if(patternMaskMat.empty() ||
+            patternMaskMat.rows != originalImg.rows ||
+            patternMaskMat.cols != originalImg.cols)createPatternMask();
+    createPixelattedImage();
+    somethingChanged();
+}
+
+void DotPatternFilter::updateSquareSize(int sq)
+{
+    squareSize = sq;
     createPatternMask();
     createPixelattedImage();
-
+    somethingChanged();
 }
+bool DotPatternFilter::isFilled() const
+{
+    return filled;
+}
+
+void DotPatternFilter::setFilled(bool value)
+{
+    filled = value;
+    createPatternMask();
+    somethingChanged();
+}
+
+void DotPatternFilter::createPropertyWidget()
+{
+    propertyWidget = new QWidget();
+    QFormLayout *fLayout = new QFormLayout();
+    fLayout->addRow(QString("Square Size"),squareSizeSlider);
+    fLayout->addWidget(filledCheckBox);
+    propertyWidget->setLayout(fLayout);
+}
+
 
 
