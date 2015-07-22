@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     morphOperations.cpp \
     rectanglefilter.cpp \
     circledetectorfilter.cpp \
-    dotpatternfilter.cpp
+    dotpatternfilter.cpp \
+    sharpnessfilter.cpp
 
 INCLUDEPATH += /usr/local/include/Opencv
 
@@ -34,6 +35,7 @@ HEADERS  += \
     morphOperations.h \
     rectanglefilter.h \
     circledetectorfilter.h \
-    dotpatternfilter.h
+    dotpatternfilter.h \
+    sharpnessfilter.h
 
 FORMS    +=
