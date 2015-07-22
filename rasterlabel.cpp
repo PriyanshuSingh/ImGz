@@ -111,6 +111,7 @@ void RasterLabel::setFilter(Filter *filter){
     this->filter = filter;
     if(isImgDefined() && isFilterDefined())this->filter->setImage(imgMat);
     if(isFilterDefined()){
+        filter->initPropertiesValues();
         connect(this,SIGNAL(mouseMoved(QMouseEvent*)),this->filter,SLOT(mouseMoved(QMouseEvent*)));
         connect(this,SIGNAL(mousePressed(QMouseEvent*)),this->filter,SLOT(mousePressed(QMouseEvent*)));
         connect(this,SIGNAL(mouseReleased(QMouseEvent*)),this->filter,SLOT(mouseReleased(QMouseEvent*)));

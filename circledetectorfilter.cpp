@@ -31,10 +31,10 @@ CircleDetectorFilter::CircleDetectorFilter()
     lowerThresholdSlider->setTickPosition(QSlider::TicksBothSides);
     lowerThresholdSlider->setTickInterval(100);
     lowerThresholdSlider->setSingleStep(1);
-    lowerThresholdSlider->setRange(1,300);
-    lowerThresholdSlider->setValue(40);
+    lowerThresholdSlider->setRange(75,300);
+    lowerThresholdSlider->setValue(100);
     upperThreshold = 120;
-    lowerThreshold = 40;
+    lowerThreshold = 100;
     createPropertyWidget();
     connect(this,SIGNAL(imageChanged()),this,SLOT(handleImageChanged()));
     connect(upperThresholdSlider,SIGNAL(valueChanged(int)),this,SLOT(updateUpperThreshold(int)));
@@ -56,10 +56,11 @@ void CircleDetectorFilter::applyFilter()
     if(isChanged()){
         circles.empty();
         cv::GaussianBlur(grayImgMat, grayImgMat, cv::Size(3, 3), 2, 2 );
-        cv::HoughCircles(grayImgMat,circles, CV_HOUGH_GRADIENT, 1, grayImgMat.rows/16, upperThreshold, 100, 0, 0);
+        cv::HoughCircles(grayImgMat,circles, CV_HOUGH_GRADIENT, 1, grayImgMat.rows/16, upperThreshold, lowerThreshold, 0, 0);
 
         for(size_t i=0; i < circles.size(); i++){
             cv::Point center(cvRound(circles[i][0]),cvRound(circles[i][1]));
+            appendLog(QString("Circle detected: ")+QString::number(center.x)+QString(" ")+QString::number(center.y));
             int radius = cvRound(circles[i][2]);
             cv::circle(processedImg,center,3,cv::Scalar(0,255,0), -1, 8, 0);
             cv::circle(processedImg,center,radius, cv::Scalar(0,0,255), 3, 8, 0);
@@ -80,6 +81,11 @@ void CircleDetectorFilter::mousePressed(QMouseEvent *ev)
 void CircleDetectorFilter::mouseReleased(QMouseEvent *ev)
 {
     
+}
+
+void CircleDetectorFilter::initPropertiesValues()
+{
+
 }
 
 cv::Mat CircleDetectorFilter::getImage()

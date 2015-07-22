@@ -16,9 +16,9 @@
 RectangleFilter::RectangleFilter():Filter()
 {
     thicknessSpinBox=new QSpinBox;
-    thicknessSpinBox->setRange(0,100);
+    thicknessSpinBox->setRange(1,100);
     thicknessSpinBox->setSingleStep(1);
-    thicknessSpinBox->setValue(0);
+    thicknessSpinBox->setValue(1);
 
     filledCheckBox = new QCheckBox(QString("Filled"));
     setNewRectangleInProgress(false);
@@ -44,6 +44,13 @@ void RectangleFilter::applyFilter()
     }else{
         processedImg.copyTo(originalImg);
     }
+}
+
+void RectangleFilter::initPropertiesValues()
+{
+    thicknessSpinBox->setValue(1);
+    setNewRectangleInProgress(false);
+    updateThickness(1);
 }
 bool RectangleFilter::isNewRectangleInProgress() const
 {

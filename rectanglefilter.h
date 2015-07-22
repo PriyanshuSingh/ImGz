@@ -18,7 +18,7 @@ public:
 
     cv::Mat getImage();
     void applyFilter();
-
+    void initPropertiesValues();
     bool isNewRectangleInProgress() const;
     void setNewRectangleInProgress(bool value);
 

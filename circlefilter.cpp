@@ -20,9 +20,9 @@
 CircleFilter::CircleFilter():Filter()
 {
     thicknessSpinBox=new QSpinBox;
-    thicknessSpinBox->setRange(0,100);
+    thicknessSpinBox->setRange(1,100);
     thicknessSpinBox->setSingleStep(1);
-    thicknessSpinBox->setValue(0);
+    thicknessSpinBox->setValue(1);
 
     filledCheckBox = new QCheckBox(QString("Filled"));
     setNewCircleInProgress(false);
@@ -55,13 +55,23 @@ bool CircleFilter::isNewCircleInProgress() const
 void CircleFilter::setNewCircleInProgress(bool value)
 {
     newCircleInProgress = value;
+
+}
+
+void CircleFilter::initPropertiesValues()
+{
+    thicknessSpinBox->setValue(1);
+    setNewCircleInProgress(false);
+    updateThickness(1);
 }
 
 void CircleFilter::mousePressed(QMouseEvent *ev)
 {
-    setNewCircleInProgress(true);
-    center = ev->pos();
-    radius = 0;
+    if(!isNewCircleInProgress()){
+        setNewCircleInProgress(true);
+        center = ev->pos();
+        radius = 0;
+    }
 }
 
 void CircleFilter::mouseReleased(QMouseEvent *ev)
@@ -72,7 +82,7 @@ void CircleFilter::mouseReleased(QMouseEvent *ev)
         int y = ev->pos().y();
         radius = sqrt((center.x() - x)*(center.x() -x) + (center.y() - y)*(center.y() - y));
         processedImg = originalImg.clone();
-        cv::circle(processedImg, cv::Point(center.x(),center.y()), radius+1, cv::Scalar(100,200,250),thickness);
+        cv::circle(processedImg, cv::Point(center.x(),center.y()), radius+1, cv::Scalar(0,0,0),thickness);
     }
 }
 

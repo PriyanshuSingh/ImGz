@@ -15,7 +15,7 @@ public:
     MorphOperations();
     cv::Mat getImage();
     void applyFilter();
-
+    void initPropertiesValues();
     bool isChanged() const;
     void setChanged(bool value);
 

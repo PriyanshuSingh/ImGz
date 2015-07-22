@@ -22,9 +22,7 @@ public:
     bool isChanged() const;
     void setChanged(bool value);
     void applyFilter();
-    void mouseMoved(QMouseEvent *ev);
-    void mousePressed(QMouseEvent *ev);
-    void mouseReleased(QMouseEvent *ev);
+    void initPropertiesValues();
     cv::Mat getImage();
 
 public slots:
@@ -32,6 +30,9 @@ public slots:
     void handleImageChanged();
     void updateUpperThreshold(int thresh);
     void updateLowerThreshold(int thresh);
+    void mouseMoved(QMouseEvent *ev);
+    void mousePressed(QMouseEvent *ev);
+    void mouseReleased(QMouseEvent *ev);
 
 private:
     cv::Mat grayImgMat;

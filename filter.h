@@ -14,6 +14,7 @@ public:
     Filter();
     virtual cv::Mat getImage(){ };
     virtual void applyFilter(){ };
+    virtual void initPropertiesValues(){ };
     QWidget *getWidget();
     cv::Mat originalImg;
     cv::Mat processedImg;

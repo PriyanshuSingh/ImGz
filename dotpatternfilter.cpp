@@ -71,6 +71,14 @@ cv::Mat DotPatternFilter::getImage()
     return processedImg;
 }
 
+void DotPatternFilter::initPropertiesValues()
+{
+    squareSize = 10;
+    squareSizeSlider->setValue(10);
+    filledCheckBox->setChecked(true);
+    filled = true;
+}
+
 void DotPatternFilter::createPatternMask()
 {
 

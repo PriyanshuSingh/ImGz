@@ -20,6 +20,7 @@ public:
 
     bool isNewCircleInProgress() const;
     void setNewCircleInProgress(bool value);
+    void initPropertiesValues();
 
 public slots:
     void updateThickness(int i);

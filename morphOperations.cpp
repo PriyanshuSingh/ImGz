@@ -55,6 +55,11 @@ void MorphOperations::applyFilter(){
     }
 }
 
+void MorphOperations::initPropertiesValues()
+{
+
+}
+
 
 cv::Mat MorphOperations::getImage()
 {

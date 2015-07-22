@@ -15,11 +15,8 @@ public:
     DotPatternFilter();
 
     void applyFilter();
-    void mouseMoved(QMouseEvent *ev);
-    void mousePressed(QMouseEvent *ev);
-    void mouseReleased(QMouseEvent *ev);
     cv::Mat getImage();
-
+    void initPropertiesValues();
     void createPatternMask();
     void createPixelattedImage();
 
@@ -31,6 +28,9 @@ public:
 
 
 public slots:
+    void mouseMoved(QMouseEvent *ev);
+    void mousePressed(QMouseEvent *ev);
+    void mouseReleased(QMouseEvent *ev);
     void somethingChanged();
     void handleImageChanged();
     void updateSquareSize(int sq);
