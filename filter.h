@@ -22,6 +22,7 @@ public:
     void setImage(cv::Mat im);
     void appendLog(QString message);
     void setLogText(QPlainTextEdit *logTxt);
+    QPlainTextEdit *logTxt;
 
 signals:
     void imageChanged();
@@ -37,7 +38,7 @@ protected:
 
 private:
     bool imageReady;
-    QPlainTextEdit *logTxt;
+
 };
 
 #endif // FILTER_H

@@ -68,6 +68,14 @@ void MainWindow::enableSharpnessFilter()
     updateDock();
 }
 
+void MainWindow::enableFaceDetector()
+{
+    currentFilter = faceDetector;
+    rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Face Detector selected"));
+    updateDock();
+}
+
 void MainWindow::enableCircleFilter()
 {
     currentFilter = circleFitler;
@@ -152,6 +160,9 @@ void MainWindow::createAction()
     sharpnessAction = new QAction(QString("Sharpness Pattern"),this);
     connect(sharpnessAction,SIGNAL(triggered(bool)),this,SLOT(enableSharpnessFilter()));
 
+    // faceDetectorAction definition
+    faceDetectorAction = new QAction(QString("Face Detector"),this);
+    connect(faceDetectorAction,SIGNAL(triggered(bool)),this,SLOT(enableFaceDetector()));
 
 
     // Menu Action //
@@ -192,6 +203,7 @@ void MainWindow::createMenu()
     effectMenu->addAction(circleDetectorAction);
     effectMenu->addAction(dotPatternAction);
     effectMenu->addAction(sharpnessAction);
+    effectMenu->addAction(faceDetectorAction);
     menuBar()->addMenu(effectMenu);
 
     // Help Menu
@@ -231,6 +243,9 @@ void MainWindow::createFilter()
     dotPatternFilter->setLogText(logTxtEdit);
     sharpnessFilter = new SharpnessFilter();
     sharpnessFilter->setLogText(logTxtEdit);
+    faceDetector = new FaceDetector();
+    faceDetector->setLogText(logTxtEdit);
+
 }
 
 void MainWindow::updateDock()

@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     rectanglefilter.cpp \
     circledetectorfilter.cpp \
     dotpatternfilter.cpp \
-    sharpnessfilter.cpp
+    sharpnessfilter.cpp \
+    facedetector.cpp
 
 INCLUDEPATH += /usr/local/include/Opencv
 
@@ -36,6 +37,10 @@ HEADERS  += \
     rectanglefilter.h \
     circledetectorfilter.h \
     dotpatternfilter.h \
-    sharpnessfilter.h
+    sharpnessfilter.h \
+    facedetector.h
 
 FORMS    +=
+
+RESOURCES += \
+    data.qrc
