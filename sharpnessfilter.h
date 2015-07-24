@@ -26,6 +26,7 @@ public slots:
     void mouseReleased(QMouseEvent *ev);
     void mouseMoved(QMouseEvent *ev);
     void somethingChanged();
+    void handleImageChanged();
 
 signals:
     //void imageChanged();

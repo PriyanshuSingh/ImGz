@@ -50,6 +50,7 @@ void MainWindow::open()
         // TODO
         std::string a = filePath.toUtf8().constData();
         mainImage = cv::imread(a);
+        rasterLabel->setImageFromWebcam(false);
         rasterLabel->setImage(mainImage);
     }
 }
@@ -93,7 +94,11 @@ void MainWindow::enableRectangleFilter()
 
 void MainWindow::enableWebcam()
 {
+    cv::Mat empty;
+    mainImage = empty;
+    rasterLabel->setImage(mainImage);
     rasterLabel->setImageFromWebcam(true);
+    filePath = QString("");
     logTxtEdit->appendPlainText(QString("Webcam Enabled"));
     setFixedSize(sizeHint());
 }

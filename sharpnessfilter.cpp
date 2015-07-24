@@ -12,7 +12,7 @@
 SharpnessFilter::SharpnessFilter():Filter()
 {
     createPropertyWidget();
-    connect(this,SIGNAL(imageChanged()),this,SLOT(somethingChanged()));
+    connect(this,SIGNAL(imageChanged()),this,SLOT(handleImageChanged()));
 }
 
 void SharpnessFilter::updateSharpType(int type){
@@ -88,6 +88,12 @@ void SharpnessFilter::createProperties(){
 
 void SharpnessFilter::somethingChanged(){
     setChanged(true);
+}
+
+void SharpnessFilter::handleImageChanged()
+{
+    somethingChanged();
+    updateSharpType(sharpTypeComboBox->currentIndex());
 }
 
 void SharpnessFilter::setChanged(bool value){

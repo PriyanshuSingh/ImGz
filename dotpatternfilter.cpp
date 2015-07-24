@@ -14,6 +14,7 @@
 #include <QVBoxLayout>
 #include <vector>
 #include <QSlider>
+#include <opencv2/objdetect/objdetect.hpp>
 
 DotPatternFilter::DotPatternFilter():Filter()
 {

@@ -8,6 +8,7 @@
 #include <QSpinBox>
 #include <QCheckBox>
 #include "filter.h"
+
 class QPoint;
 
 class CircleFilter : public Filter
