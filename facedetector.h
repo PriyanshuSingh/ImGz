@@ -9,6 +9,7 @@
 #include <QSpinBox>
 #include <QCheckBox>
 #include <QSlider>
+#include<QVBoxLayout>
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "filter.h"
@@ -16,6 +17,7 @@
 #include "morphOperations.h"
 #include "dotpatternfilter.h"
 #include "sharpnessfilter.h"
+#include <QComboBox>
 
 class FaceDetector : public Filter
 {
@@ -30,6 +32,7 @@ public:
     bool isChanged() const;
     void setChanged(bool value);
 
+
 public slots:
     virtual void mouseReleased(QMouseEvent *ev);
     virtual void mousePressed(QMouseEvent *ev);
@@ -38,15 +41,17 @@ public slots:
     void somethingChanged();
     void updateMedianBlurSizeSlider(int);
     void updateRectThresholdSpinBox(int);
+    void updateFilterType(int i);
 
 private:
     bool changed;
 
-    Filter *currentFilter;
 
+    Filter *currentFilter;
     MorphOperations *morphFilter;
     DotPatternFilter *dotPatternFilter;
     SharpnessFilter *sharpnessFilter;
+    //int frameCount;
 
     cv::Mat grayImgMat;
     cv::CascadeClassifier frontalFaceCascade;
@@ -54,6 +59,9 @@ private:
 
     QSlider *medianBlurSizeSlider;
     QSpinBox *rectThresholdSpinBox;
+    QComboBox *filterTypeComboBox;
+    QWidget *filterPropWidget;
+
 
     int rectThreshold;
     int medianBlurSize;
@@ -62,6 +70,7 @@ private:
     std::vector<cv::Rect> tempfaces;
 
     void createPropertyWidget();
+    void updateFilterProperties();
 };
 
 #endif // FACEDETECTOR_H
