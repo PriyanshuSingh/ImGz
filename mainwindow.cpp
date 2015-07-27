@@ -102,13 +102,18 @@ void MainWindow::enableRectangleFilter()
 
 void MainWindow::enableWebcam()
 {
-    cv::Mat empty;
-    mainImage = empty;
-    rasterLabel->setImage(mainImage);
-    rasterLabel->setImageFromWebcam(true);
-    filePath = QString("");
-    logTxtEdit->appendPlainText(QString("Webcam Enabled"));
-    setFixedSize(sizeHint());
+    if(!rasterLabel->isImageFromWebcam()){
+        cv::Mat empty;
+        mainImage = empty;
+        rasterLabel->setImage(mainImage);
+        rasterLabel->setImageFromWebcam(true);
+        filePath = QString("");
+        logTxtEdit->appendPlainText(QString("Webcam Enabled"));
+        setFixedSize(sizeHint());
+    }else{
+        rasterLabel->setImageFromWebcam(false);
+        rasterLabel->setImage(mainImage);
+    }
 }
 
 void MainWindow::enableCircleDetectorFilter()

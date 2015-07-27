@@ -7,7 +7,7 @@
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/core/utility.hpp>
-
+#include <QStackedLayout>
 #include <QDockWidget>
 #include <QWidget>
 #include <QSpinBox>
@@ -22,15 +22,14 @@ FaceDetector::FaceDetector()
 {
     //frameCount = 0;
 
-    bool ok = frontalFaceCascade.load("/usr/local/share/OpenCV/lbpcascades/lbpcascade_frontalcatface.xml");
+    bool ok = frontalFaceCascade.load("/usr/local/share/OpenCV/lbpcascades/lbpcascade_frontalface.xml");
     ok = ok & profileFaceCascade.load("/usr/local/share/OpenCV/lbpcascades/lbpcascade_profileface.xml");
 
     medianBlurSizeSlider = new QSlider(Qt::Horizontal);
-    medianBlurSizeSlider->setTickInterval(100);
     medianBlurSizeSlider->setFocusPolicy(Qt::StrongFocus);
     medianBlurSizeSlider->setSingleStep(2);
     medianBlurSizeSlider->setRange(1,9);
-    medianBlurSizeSlider->setTickPosition(QSlider::TicksBothSides);
+    medianBlurSizeSlider->setTickPosition(QSlider::NoTicks);
 
     rectThresholdSpinBox = new QSpinBox();
     rectThresholdSpinBox->setRange(0,10);
@@ -61,22 +60,23 @@ void FaceDetector::updateFilterType(int i){
     switch (i) {
     case 0:
          currentFilter = NULL;
-         updateFilterProperties();
+         updateFilterProperties(i);
         break;
     case 1:
         currentFilter = morphFilter;
-        updateFilterProperties();
+        updateFilterProperties(i);
         break;
     case 2:
         currentFilter = sharpnessFilter;
-        updateFilterProperties();
+        updateFilterProperties(i);
         break;
     case 3:
         currentFilter = dotPatternFilter;
-        updateFilterProperties();
+        updateFilterProperties(i);
         break;
     default:
         currentFilter = NULL;
+        updateFilterProperties(0);
         break;
     }
 }
@@ -91,22 +91,27 @@ void FaceDetector::applyFilter()
     static int a = 0;
     //frameCount++;
     dotPatternFilter->setLogText(logTxt);
+    //cv::flip(grayImgMat,grayImgMat,1);
     if(isChanged()){
         faces.clear();
         tempfaces.clear();
+        if(medianBlurSize%2 != 1){
+            appendLog(QString::number(medianBlurSize));
+            medianBlurSize++;
+        }
         cv::medianBlur(grayImgMat,grayImgMat,medianBlurSize);
 
         if(!frontalFaceCascade.empty()){
-            frontalFaceCascade.detectMultiScale(grayImgMat,faces,1.1,rectThreshold);
+            frontalFaceCascade.detectMultiScale(grayImgMat,faces,1.1,rectThreshold,0,cv::Size(10,10));
         }
         if(!profileFaceCascade.empty()){
-            profileFaceCascade.detectMultiScale(grayImgMat,tempfaces,1.1,rectThreshold);
+            profileFaceCascade.detectMultiScale(grayImgMat,tempfaces,1.1,rectThreshold,0,cv::Size(10,10));
             for(int i=0; i<tempfaces.size();++i){
                 faces.push_back(tempfaces[i]);
             }
         }
         originalImg.copyTo(processedImg);
-
+        //cv::flip(processedImg,processedImg,1);
         for(int i=0; i<faces.size(); ++i){
             cv::rectangle(processedImg,faces[i],cv::Scalar(0,0,0),3,8,0);
             if(currentFilter!=NULL){
@@ -159,6 +164,11 @@ void FaceDetector::somethingChanged()
 
 void FaceDetector::updateMedianBlurSizeSlider(int val)
 {
+    //appendLog(QString::number(medianBlurSize)+QString(" to ")+QString::number(val));
+    if(val%2==0){
+        val++;
+        medianBlurSizeSlider->setValue(val);
+    }
     medianBlurSize = val;
     somethingChanged();
 }
@@ -180,15 +190,23 @@ void FaceDetector::createPropertyWidget()
     fLayout->addRow(QString("Filter Type"),filterTypeComboBox);
     //fLayout->addRow(QString("Filter Properites"),filterPropWidget);
     boxLayout->addLayout(fLayout);
+    stackedLayout = new QStackedLayout();
+    stackedLayout->addWidget(new QWidget());
+    stackedLayout->addWidget(morphFilter->getWidget());
+    stackedLayout->addWidget(sharpnessFilter->getWidget());
+    stackedLayout->addWidget(dotPatternFilter->getWidget());
     //boxLayout->addLayout(filterPropBox);
-    boxLayout->addWidget(filterPropWidget);
+    stackedLayout->setCurrentIndex(0);
+    boxLayout->addLayout(stackedLayout);
     propertyWidget->setLayout(boxLayout);
 }
 
-void FaceDetector::updateFilterProperties(){
+void FaceDetector::updateFilterProperties(int i){
     //filterPropBox = new QVBoxLayout();
-    if(currentFilter!=NULL)
-        filterPropWidget=currentFilter->getWidget();
+//    if(currentFilter!=NULL)
+//        filterPropWidget=currentFilter->getWidget();
+    stackedLayout->setCurrentIndex(i);
+    somethingChanged();
 }
 
 bool FaceDetector::isChanged() const

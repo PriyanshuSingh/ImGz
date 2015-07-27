@@ -27,6 +27,7 @@ void RasterLabel::renderImage()
 {
     if(isImageFromWebcam()){
         cam.read(imgMat);
+        cv::flip(imgMat, imgMat, 1);
         if(isFilterDefined()){
             filter->setImage(imgMat);
             // TODO

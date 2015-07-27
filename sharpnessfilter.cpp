@@ -41,12 +41,13 @@ void SharpnessFilter::updateSharpType(int type){
         somethingChanged();
         break;
     default:
+        noneType = true;
         break;
     }
 }
 
 void SharpnessFilter::applyFilter(){
-    if(isChanged()){
+    if(isChanged() && !noneType){
         /*if(noneType){
             processedImg = tempOriginalImg.clone();
         }*/
@@ -82,7 +83,7 @@ void SharpnessFilter::createProperties(){
     sharpTypeComboBox->addItem("Fine");
     sharpTypeComboBox->addItem("Coarse");
     sharpTypeComboBox->setCurrentText("None");
-    connect(sharpTypeComboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(updateSharpType(int)));
+    connect(sharpTypeComboBox,SIGNAL(activated(int)),this,SLOT(updateSharpType(int)));
     //tempOriginalImg = originalImg.clone();
 }
 

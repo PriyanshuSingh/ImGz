@@ -17,6 +17,7 @@
 #include "morphOperations.h"
 #include "dotpatternfilter.h"
 #include "sharpnessfilter.h"
+#include <QStackedLayout>
 #include <QComboBox>
 
 class FaceDetector : public Filter
@@ -61,7 +62,7 @@ private:
     QSpinBox *rectThresholdSpinBox;
     QComboBox *filterTypeComboBox;
     QWidget *filterPropWidget;
-
+    QStackedLayout *stackedLayout;
 
     int rectThreshold;
     int medianBlurSize;
@@ -70,7 +71,7 @@ private:
     std::vector<cv::Rect> tempfaces;
 
     void createPropertyWidget();
-    void updateFilterProperties();
+    void updateFilterProperties(int i);
 };
 
 #endif // FACEDETECTOR_H
