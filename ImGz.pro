@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     circledetectorfilter.cpp \
     dotpatternfilter.cpp \
     sharpnessfilter.cpp \
-    facedetector.cpp
+    facedetector.cpp \
+    facerecognition.cpp
 
 INCLUDEPATH += /usr/local/include/Opencv
 
@@ -38,7 +39,8 @@ HEADERS  += \
     circledetectorfilter.h \
     dotpatternfilter.h \
     sharpnessfilter.h \
-    facedetector.h
+    facedetector.h \
+    facerecognition.h
 
 FORMS    +=
 

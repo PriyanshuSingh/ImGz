@@ -60,6 +60,13 @@ void MainWindow::updateStatusBar(QMouseEvent *ev)
     xyLabel->setText(QString("x:")+QString::number(ev->pos().x())+QString("|y:")+QString::number(ev->pos().y()));
 }
 
+void MainWindow::enableFaceRecognition(){
+    currentFilter = faceRecognition;
+    rasterLabel->setFilter(currentFilter);
+    logTxtEdit->appendPlainText(QString("Face Recognition selected"));
+    updateDock();
+}
+
 void MainWindow::enableSharpnessFilter()
 {
     currentFilter = sharpnessFilter;
@@ -169,6 +176,9 @@ void MainWindow::createAction()
     faceDetectorAction = new QAction(QString("Face Detector"),this);
     connect(faceDetectorAction,SIGNAL(triggered(bool)),this,SLOT(enableFaceDetector()));
 
+    // faceRecognitionAction definition
+    faceRecognitionAction = new QAction(QString("Face Recognition"),this);
+    connect(faceRecognitionAction,SIGNAL(triggered(bool)),this,SLOT(enableFaceRecognition()));
 
     // Menu Action //
 
@@ -250,6 +260,8 @@ void MainWindow::createFilter()
     sharpnessFilter->setLogText(logTxtEdit);
     faceDetector = new FaceDetector();
     faceDetector->setLogText(logTxtEdit);
+    faceRecognition = new FaceRecognition();
+    faceRecognition->setLogText(logTxtEdit);
 
 }
 

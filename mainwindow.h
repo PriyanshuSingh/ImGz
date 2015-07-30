@@ -10,6 +10,7 @@
 #include "dotpatternfilter.h"
 #include "sharpnessfilter.h"
 #include "facedetector.h"
+#include "facerecognition.h"
 class Filter;
 class CircleFilter;
 class RasterLabel;
@@ -39,6 +40,7 @@ private slots:
     void enableDotPatternFilter();
     void enableSharpnessFilter();
     void enableFaceDetector();
+    void enableFaceRecognition();
 
 private:
     //Main Widget
@@ -52,7 +54,7 @@ private:
     QAction *dotPatternAction;
     QAction *sharpnessAction;
     QAction *faceDetectorAction;
-
+    QAction *faceRecognitionAction;
     QAction *openAction;
     QAction *saveAction;
     QAction *aboutAction;
@@ -92,6 +94,7 @@ private:
     DotPatternFilter *dotPatternFilter;
     SharpnessFilter *sharpnessFilter;
     FaceDetector *faceDetector;
+    FaceRecognition *faceRecognition;
     cv::Mat mainImage;
     QString filePath;
 
