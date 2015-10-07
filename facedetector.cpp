@@ -7,6 +7,7 @@
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/core/utility.hpp>
+#include <opencv2/features2d/features2d.hpp>
 #include <QStackedLayout>
 #include <QDockWidget>
 #include <QWidget>
@@ -114,6 +115,11 @@ void FaceDetector::applyFilter()
         //cv::flip(processedImg,processedImg,1);
         for(int i=0; i<faces.size(); ++i){
             cv::rectangle(processedImg,faces[i],cv::Scalar(0,0,0),3,8,0);
+            cv::Mat ff(processedImg,faces[i]);
+            cv::Ptr<cv::FeatureDetector> d = cv::AKAZE::create();
+            std::vector<cv::KeyPoint> keypoints;
+            d->detect(ff,keypoints);
+            cv::drawKeypoints(ff,keypoints,ff);
             if(currentFilter!=NULL){
                 cv::Mat temp(processedImg,faces[i]);
                 currentFilter->setImage(temp);

@@ -14,6 +14,7 @@
 #include<QFormLayout>
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
 #include "filter.h"
 #include <QObject>
 #include <QWidget>
@@ -32,26 +33,26 @@ class FaceRecognition : public Filter
     Q_OBJECT
 public:
     FaceRecognition();
-    virtual cv::Mat getImage();
-    virtual void applyFilter();
-    virtual void initPropertiesValues();
+    virtual cv::Mat getImage(){return this->processedImg;}
+    virtual void applyFilter(){}
+    virtual void initPropertiesValues(){}
 
     bool isChanged() const;
     void setChanged(bool value);
     cv::Mat correctGamma( cv::Mat& img, double gamma );
     cv::Mat correctSharpness(cv::Mat& img);
     cv::Mat applyHistEq(cv::Mat& img);
-    static int read_csv(const string& filename, std::vector<cv::Mat>& images, std::vector<int>& labels, char separator = ';');
+    static int read_csv(const std::string& filename, std::vector<cv::Mat>& images, std::vector<int>& labels, char separator = ';');
 public slots:
-    virtual void mouseReleased(QMouseEvent *ev);
-    virtual void mousePressed(QMouseEvent *ev);
-    virtual void mouseMoved(QMouseEvent *ev);
-    void handleImageChanged();
-    void somethingChanged();
-    void updateFaceRecAlgo(int);
-    void updateGamma(int);
-    void updateHistEqStatus(bool);
-    void updateSharpnessStatus(bool);
+    virtual void mouseReleased(QMouseEvent *ev){}
+    virtual void mousePressed(QMouseEvent *ev){}
+    virtual void mouseMoved(QMouseEvent *ev){}
+    void handleImageChanged(){}
+    void somethingChanged(){}
+    void updateFaceRecAlgo(int){}
+    void updateGamma(int){}
+    void updateHistEqStatus(bool){}
+    void updateSharpnessStatus(bool){}
 
 private:
     std::vector<cv::Mat> images;
@@ -60,7 +61,7 @@ private:
     QSlider *gammaSlider;
     QCheckBox *histEqCheckBox;
     QCheckBox *sharpnessCheckBox;
-    cv::Ptr<face::FaceRecognizer> currentAlgo;
+    cv::Ptr<cv::FeatureDetector>/*face::FaceRecognizer*/ currentAlgo;
     cv::CascadeClassifier haar_cascade;
     cv::Mat grayImgMat;
     bool histEqStatus;

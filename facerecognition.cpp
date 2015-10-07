@@ -1,6 +1,6 @@
 #include "facerecognition.h"
 #include <QComboBox>
-
+/*
 using namespace std;
 FaceRecognition::FaceRecognition()
 {
@@ -218,3 +218,4 @@ void FaceDetector::mouseMoved(QMouseEvent *ev)
 
 }
 
+*/
